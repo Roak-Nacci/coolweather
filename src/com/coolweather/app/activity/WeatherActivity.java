@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -94,13 +93,14 @@ public class WeatherActivity extends Activity implements OnClickListener{
 	private void queryWeatherCode(String countyCode) {
 		String address = "http://www.weather.com.cn/data/list3/city" + countyCode
 				+ ".xml";
-		Log.d("WeatherAcvitity", "queryWeatherCode");
 		queryFromServer(address, "countyCode");
+		//String address = "http://www.weather.com.cn/data/cityinfo/101010100.html";
 	}
-	
+		
 	private void queryWeatherInfo(String weatherCode) {
-		String address = "http://www.weather.com.cn/data/cityinfo/" + weatherCode
-				+ ".html";
+		String httpUrl = "http://apis.baidu.com/apistore/weatherservice/cityid";
+		String httpArg = "cityid=" + weatherCode;
+		String address = httpUrl + "?" + httpArg;
 		queryFromServer(address, "weatherCode");
 	}
 	
@@ -109,18 +109,16 @@ public class WeatherActivity extends Activity implements OnClickListener{
 			
 			@Override 
 			public void onFinish(final String response) {
-				if ("countyCode".equals(type)) {
+				if ("countyCode".equals(type)){
 					if (!TextUtils.isEmpty(response)) {
 						String[] array = response.split("\\|");
-						if (array != null &&array.length == 2) {
+						if (array != null && array.length == 2) {
 							String weatherCode = array[1];
 							queryWeatherInfo(weatherCode);
 						}
 					}
 				} else if ("weatherCode".equals(type)) {
-					Log.d("WeatherActivity", "weatherCode1");
 					Utility.handleWeatherResponse(WeatherActivity.this, response);
-					Log.d("WeatherActivity", "weatherCode2");
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
@@ -129,7 +127,8 @@ public class WeatherActivity extends Activity implements OnClickListener{
 					});
 				}
 			}
-			
+
+
 			@Override
 			public void onError(Exception e) {
 				runOnUiThread(new Runnable() {
