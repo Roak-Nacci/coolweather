@@ -62,10 +62,14 @@ public class ChooseAreaActivity extends Activity {
 	
 	private boolean isFromWeatherActivity;
 	
+	private boolean refreshCityList;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		isFromWeatherActivity = getIntent().getBooleanExtra("from_weather_activity",
+				false);
+		refreshCityList = getIntent().getBooleanExtra("refresh_city_list",
 				false);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		if (prefs.getBoolean("city_selected", false) && !isFromWeatherActivity) {
@@ -106,20 +110,25 @@ public class ChooseAreaActivity extends Activity {
 	}
 
 	private void queryProvinces() {
-		provinceList = coolWeatherDB.loadProvinces();
-		if (provinceList.size() > 0) {
-			dataList.clear();
-			for (Province province : provinceList) {
-				dataList.add(province.getProvinceName());
+		if (!refreshCityList) {
+			provinceList = coolWeatherDB.loadProvinces();
+			if (provinceList.size() > 0 ) {
+				dataList.clear();
+				for (Province province : provinceList) {
+					dataList.add(province.getProvinceName());
+				}
+				adapter.notifyDataSetChanged();
+				listView.setSelection(0);
+				titleText.setText("中国");
+				currentLevel = LEVEL_PROVINCE;
+			} else {
+				queryFromServer(null, "province");
 			}
-			adapter.notifyDataSetChanged();
-			listView.setSelection(0);
-			titleText.setText("中国");
-			currentLevel = LEVEL_PROVINCE;
 		} else {
+			refreshCityList = true;
+			coolWeatherDB.dropTable();
 			queryFromServer(null, "province");
-		}
-		
+		}		
 	}
 	
 	private void queryCities() {

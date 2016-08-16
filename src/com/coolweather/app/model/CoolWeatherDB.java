@@ -120,4 +120,8 @@ public class CoolWeatherDB {
 		}
 		return list;
 	}
+	
+	public void dropTable() {
+		db.execSQL("DROPTABLECUSTOMERS");
+	}
 }

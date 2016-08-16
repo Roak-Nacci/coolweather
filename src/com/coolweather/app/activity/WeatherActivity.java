@@ -94,7 +94,6 @@ public class WeatherActivity extends Activity implements OnClickListener{
 		String address = "http://www.weather.com.cn/data/list3/city" + countyCode
 				+ ".xml";
 		queryFromServer(address, "countyCode");
-		//String address = "http://www.weather.com.cn/data/cityinfo/101010100.html";
 	}
 		
 	private void queryWeatherInfo(String weatherCode) {
@@ -151,5 +150,12 @@ public class WeatherActivity extends Activity implements OnClickListener{
 		currentDateText.setText(prefs.getString("current_date", ""));
 		weatherInfoLayout.setVisibility(View.VISIBLE);
 		cityNameText.setVisibility(View.VISIBLE);		
+	}
+	
+	private void refreshCityList() {
+		Intent intent = new Intent(this, ChooseAreaActivity.class);
+		intent.putExtra("refresh_city_list", true);
+		startActivity(intent);
+		finish();
 	}
 }
