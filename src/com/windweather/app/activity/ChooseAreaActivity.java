@@ -1,4 +1,4 @@
-package com.coolweather.app.activity;
+package com.windweather.app.activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +19,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.coolweather.app.R;
-import com.coolweather.app.model.City;
-import com.coolweather.app.model.CoolWeatherDB;
-import com.coolweather.app.model.County;
-import com.coolweather.app.model.Province;
-import com.coolweather.app.util.HttpCallbackListener;
-import com.coolweather.app.util.HttpUtil;
-import com.coolweather.app.util.Utility;
+import com.windlweather.app.R;
+import com.windweather.app.model.City;
+import com.windweather.app.model.CoolWeatherDB;
+import com.windweather.app.model.County;
+import com.windweather.app.model.Province;
+import com.windweather.app.util.HttpCallbackListener;
+import com.windweather.app.util.HttpUtil;
+import com.windweather.app.util.Utility;
 
 public class ChooseAreaActivity extends Activity {
 
@@ -72,7 +72,8 @@ public class ChooseAreaActivity extends Activity {
 		refreshCityList = getIntent().getBooleanExtra("refresh_city_list",
 				false);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		if (prefs.getBoolean("city_selected", false) && !isFromWeatherActivity) {
+		if (prefs.getBoolean("city_selected", false) && !isFromWeatherActivity
+				&& !refreshCityList) {
 			Intent intent = new Intent(this, WeatherActivity.class);
 			startActivity(intent);
 			finish();
@@ -125,9 +126,14 @@ public class ChooseAreaActivity extends Activity {
 				queryFromServer(null, "province");
 			}
 		} else {
-			refreshCityList = true;
-			coolWeatherDB.dropTable();
+			refreshCityList = false;
+			coolWeatherDB.refreshTable();
+			SharedPreferences.Editor editor = PreferenceManager.
+					getDefaultSharedPreferences(this).edit();
+			editor.putBoolean("city_selected", false);
+			editor.commit();
 			queryFromServer(null, "province");
+			Toast.makeText(ChooseAreaActivity.this, "正在刷新城市列表", Toast.LENGTH_SHORT).show();
 		}		
 	}
 	

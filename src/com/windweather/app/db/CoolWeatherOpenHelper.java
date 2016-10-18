@@ -1,4 +1,4 @@
-package com.coolweather.app.db;
+package com.windweather.app.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -42,4 +42,12 @@ public class CoolWeatherOpenHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 	}
 	
+	public static void onRefresh(SQLiteDatabase db) {
+		db.execSQL("drop table Province");
+		db.execSQL("drop table City");
+		db.execSQL("drop table County");
+		db.execSQL(CREATE_PROVINCE);
+		db.execSQL(CREATE_CITY);
+		db.execSQL(CREATE_COUNTY);	
+	}
 }

@@ -36,10 +36,15 @@
     </RelativeLayout>
     
     <RelativeLayout
+        android:id="@+id/weather_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#27A5F9" >
+        android:layout_weight="1" 
+                android:background="#27A5F9">
+<!--    
+        android:background="@drawable/day2" 
+        android:background="#27A5F9"
+        android:background="@drawable/day"-->
         
         <TextView 
             android:id="@+id/publish_text"
@@ -66,14 +71,28 @@
                 android:textColor="#FFF"
                 android:textSize="18sp" />
             
-            <TextView
-                android:id="@+id/weather_desp"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:gravity="center"
-                android:textColor="#FFF"
-                android:textSize="40sp" />
+                android:orientation="horizontal" >
+                
+                <ImageView 
+                    android:id="@+id/weather_image"
+                    android:tint="#fff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/sunny" />
+
+                <TextView
+                    android:id="@+id/weather_desp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:textColor="#FFF"
+                    android:textSize="40sp" />
+            </LinearLayout>
             
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -106,7 +125,14 @@
                     android:layout_gravity="center_vertical"
                     android:textColor="#FFF"
                     android:textSize="40sp" />
-			</LinearLayout>"
-		</LinearLayout>
-    </RelativeLayout>"
+			</LinearLayout>
+			
+			<Button
+                android:id="@+id/refresh_city_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:text="刷新城市列表" />
+</LinearLayout>
+    </RelativeLayout>
 </LinearLayout>
