@@ -3,5 +3,20 @@
 
     <string name="app_name">风云天气</string>
     <string name="hello_world">Hello world!</string>
-
+    <string-array name="menu_item" >	    	
+	    	<item>设置</item>
+	    	<item>更新城市列表</item>
+	    	<item>检查更新</item>
+	    	<item>关于我们</item>
+	</string-array>
+	<string-array name="planet_array" >	    	
+	    	<item>Mercury水星</item>
+	    	<item>Venus金星</item>
+	    	<item>Earth地球</item>
+	    	<item>Mars火星</item>
+	    	<item>Jupiter木星</item>
+	    	<item>Saturn土星</item>	    	
+	    	<item>Uranus天王星</item>
+	    	<item>Neptune海王星</item>
+	</string-array>
 </resources>

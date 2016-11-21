@@ -82,10 +82,11 @@ public class Utility {
 			String weatherCode = weatherInfo.getString("citycode");
 			String temp1 = weatherInfo.getString("h_tmp");
 			String temp2 = weatherInfo.getString("l_tmp");
+			String date = weatherInfo.getString("date");
 			String weatherDesp = weatherInfo.getString("weather");
 			String publishTime = weatherInfo.getString("time");
 			saveWeatherInfo(context, cityName, weatherCode,
-					temp1, temp2, weatherDesp, publishTime);
+					temp1, temp2, weatherDesp, publishTime, date);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -93,7 +94,7 @@ public class Utility {
 	
 	public static void saveWeatherInfo(Context context, String cityName,
 			String weatherCode, String temp1, String temp2, String weatherDesp,
-			String publishTime) {
+			String publishTime, String date) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyƒÍM‘¬d»’", Locale.CHINA);
 		SharedPreferences.Editor editor = PreferenceManager.
 					getDefaultSharedPreferences(context).edit();
@@ -105,6 +106,7 @@ public class Utility {
 		editor.putString("weather_desp", weatherDesp);
 		editor.putString("publish_time", publishTime);
 		editor.putString("current_date", sdf.format(new Date()));
+		editor.putString("date", date);
 		editor.commit();			
 	}
 }

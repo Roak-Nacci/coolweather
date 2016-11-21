@@ -25,6 +25,7 @@
         </activity>
         <activity android:name="com.windweather.app.activity.WeatherActivity" >
         </activity>
+        <activity android:name="com.windweather.app.activity.SettingActivity" >
+        </activity>
 	</application>
-
 </manifest>

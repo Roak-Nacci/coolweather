@@ -1,19 +1,26 @@
 package com.windweather.app.activity;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,15 +29,22 @@ import com.windweather.app.util.HttpCallbackListener;
 import com.windweather.app.util.HttpUtil;
 import com.windweather.app.util.Utility;
 
-public class WeatherActivity extends Activity implements OnClickListener{
+public class WeatherActivity extends FragmentActivity implements OnClickListener, OnItemClickListener{
 	
+	
+	private ListView mDrawerList;
+	
+	private DrawerLayout mDrawerLayout;
+
+	private String[] mPlanetTitles;
+
 	private Button switchCity;
 	
 	private Button refreshWeather;
 
 	private LinearLayout weatherInfoLayout;
 	
-	private RelativeLayout weatherLayout;
+	private RelativeLayout weatherMainLayout;
 	
 	private TextView cityNameText;
 
@@ -58,7 +72,7 @@ public class WeatherActivity extends Activity implements OnClickListener{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.weather_layout);
 		weatherInfoLayout = (LinearLayout) findViewById(R.id.weather_info_layout);
-		weatherLayout = (RelativeLayout) findViewById(R.id.weather_layout);
+		weatherMainLayout = (RelativeLayout) findViewById(R.id.weather_main_layout);
 		cityNameText = (TextView) findViewById(R.id.city_name);
 		weatherDespText = (TextView) findViewById(R.id.weather_desp);
 		temp1Text = (TextView) findViewById(R.id.temp1);
@@ -76,6 +90,15 @@ public class WeatherActivity extends Activity implements OnClickListener{
 		refreshCityList = (Button) findViewById(R.id.refresh_city_list);
 		refreshCityList.setOnClickListener(this);
 		
+		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+    	mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    	mPlanetTitles = getResources().getStringArray(R.array.menu_item);
+    	mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+    			R.layout.drawer_list_item, mPlanetTitles));
+    	mDrawerList.setOnItemClickListener(this);
+    	
+
+    			
 		String countyCode = getIntent().getStringExtra("county_code");
 		if (!TextUtils.isEmpty(countyCode)) {
 			publishText.setText("同步中...");
@@ -86,7 +109,18 @@ public class WeatherActivity extends Activity implements OnClickListener{
 			showWeather();
 		}
 	}
-	
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		Intent intent = new Intent(this, SettingActivity.class);
+		Bundle args = new Bundle();
+		args.putInt("item_number", position);
+		intent.putExtras(args);
+		mDrawerList.setItemChecked(position, true);
+		setTitle(mPlanetTitles[position]);
+		startActivity(intent);
+	}
+
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()) {
@@ -168,7 +202,8 @@ public class WeatherActivity extends Activity implements OnClickListener{
 		temp1Text.setText(prefs.getString("temp1", ""));
 		temp2Text.setText(prefs.getString("temp2", ""));
 		weatherDespText.setText(prefs.getString("weather_desp", ""));
-		publishText.setText("今天" + prefs.getString("publish_time", "") + "发布");
+		publishText.setText("今天" + prefs.getString("publish_time", "") + 
+				"  " + prefs.getString("date", "") + "发布");
 		currentDateText.setText(prefs.getString("current_date", ""));
 		weatherImage.setImageResource(chooseWeatherImage(prefs));
 		time.setToNow();
@@ -198,23 +233,23 @@ public class WeatherActivity extends Activity implements OnClickListener{
 	}
 	
 	private void refreshCityList() {
-		changeBackground(DAY_NIGHT);
-		if (DAY_NIGHT) {
-			DAY_NIGHT = false;
-		} else {
-			DAY_NIGHT = true;
-		} 
-//		Intent intent = new Intent(this, ChooseAreaActivity.class);
-//		intent.putExtra("refresh_city_list", true);
-//		startActivity(intent);
-//		finish();
+//		changeBackground(DAY_NIGHT);
+//		if (DAY_NIGHT) {
+//			DAY_NIGHT = false;
+//		} else {
+//			DAY_NIGHT = true;
+//		} 
+		Intent intent = new Intent(this, ChooseAreaActivity.class);
+		intent.putExtra("refresh_city_list", true);
+		startActivity(intent);
+		finish();
 	}
 	
 	private void changeBackground(boolean DAY_NIGHT) {
 		if (DAY_NIGHT) {
-			weatherLayout.setBackgroundResource(R.drawable.day2);
+			weatherMainLayout.setBackgroundResource(R.drawable.day2);
 		} else {
-			weatherLayout.setBackgroundResource(R.drawable.night);
+			weatherMainLayout.setBackgroundResource(R.drawable.night);
 		}
 	}
 }
